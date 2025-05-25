@@ -171,7 +171,7 @@ def process_records():
                 return jsonify({'error': 'No file selected'}), 400
             
             filename = secure_filename(file.filename)
-            if not filename.lower().endswith(('.txt', '.marc')):
+            if not filename.lower().endswith(('.txt', '.mrk')):
                 return jsonify({'error': 'Please upload a .txt or .marc file'}), 400
             
             content = file.read().decode('utf-8')
@@ -200,21 +200,21 @@ def download_file():
         processed_content = request.args.get('content', '')
         if not processed_content:
             return jsonify({'error': 'No content to download'}), 400
-        
-        # Create a file-like object
+
         file_obj = io.BytesIO()
         file_obj.write(processed_content.encode('utf-8'))
         file_obj.seek(0)
-        
+
         return send_file(
             file_obj,
             as_attachment=True,
-            download_name='processed_marc_records.txt',
+            download_name='processed_marc_records.mrk',
             mimetype='text/plain'
         )
-    
+
     except Exception as e:
         return jsonify({'error': f'Download error: {str(e)}'}), 500
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
